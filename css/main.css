@@ -1,0 +1,35 @@
+body>div{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.create{
+    background-color: cadetblue;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    height: 310px;
+}
+.create-task{
+    margin-left: 25px;
+}
+
+.new{
+    background-color: aquamarine;
+    width: 450px;
+    height: 500px;
+}
+
+.active{
+    background-color: darkgrey;
+    width: 450px;
+    height: 500px;
+}
+
+.done{
+    background-color: khaki;
+    width: 450px;
+    height: 500px;
+}
