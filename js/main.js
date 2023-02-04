@@ -1,43 +1,24 @@
-Vue.component(cards,{
-    template: `
-            <ul>
-            <li v-for="task in tasks">
-                <p>Name{{ task.name }}</p>
-                <p>Task1: {{ task.task1 }}</p>
-            </li>
-        </ul>
-    `,
-    data() {
-        return {
-            name: null,
-            task1: null
-        };
+let eventBus = new Vue()
+
+let app = new Vue({
+    el: '#app',
+    data:{
+            tasks: []
+    },
+    mounted() {
+        eventBus.$on('task-submitted', Task => {
+            this.tasks.push(Task)
+        })
     },
     methods: {
-        create(){
+        createTask(){
             let Task = {
                 name: this.name,
                 task1: this.task1
             }
-            this.$emit('task-submitted', Task)
+            eventBus.$emit('task-submitted', Task)
             this.name = null
             this.task1 = null
         }
     }
 })
-
-let app = new Vue({
-    el: '#app',
-    data(){
-        return{
-            tasks: []
-        }
-    },
-    methods:{
-        createTask(Task){
-            this.tasks.push(Task)
-        }
-    }
-})
-
-
