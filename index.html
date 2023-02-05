@@ -12,38 +12,13 @@
 </head>
 <body>
 <div class="board" id="app">
-    <div class="create">
-        <form class="create-task" @submit.prevent="createTask">
-            <p>
-                <label>Название карточки:</label>
-                <input type="text" v-model="name">
-            </p>
+    <form-task></form-task>
+    <cards1></cards1>
 
-            <p>
-                <label>Task1:</label>
-                <input name="task1" v-model="task1">
-            </p>
+<!--    <div class="active">-->
+<!--    </div>-->
 
-            <p>
-                <input type="submit" value="Отправить">
-            </p>
-        </form>
-    </div>
-
-    <div class="new">
-        <p v-if="!tasks.length">There are no tasks yet.</p>
-        <ul v-else>
-            <li v-for="task in tasks">
-                <p>{{ task.name }}</p>
-                <p>{{ task.task1 }}</p>
-            </li>
-        </ul>
-    </div>
-
-    <div class="active">
-    </div>
-
-    <div class="done"></div>
+<!--    <div class="done"></div>-->
 </div>
 
 
