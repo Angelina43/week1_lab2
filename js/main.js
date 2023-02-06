@@ -18,7 +18,7 @@ Vue.component('formTask', {
                 <label for="task2">Task2:</label>
                 <input id="task2" name="task2" v-model="task2">
             </p>
-
+            <h1>Костя и гриша = почта</h1>
             <p>
                 <input type="submit" value="Отправить">
             </p>
@@ -46,9 +46,9 @@ Vue.component('cards1', {
          <div class="new"   >
         <p v-if="!tasks.length">Нет карточек</p>
         <ul v-else>
-            <li v-for="task in tasks">
+            <li v-for="(task in tasks">
                 <p>{{ task.name }}</p>
-                <p>{{ task.task1 }} <button @click="removeTask(task)">Скрыть</button></p>
+                <p>{{ task.task1 }} <button @click="removeTask(task)">Скрыть</button></p> 
                 <p>{{ task.task2 }} <button>Скрыть</button></p>
             </li>
         </ul>
@@ -82,6 +82,7 @@ Vue.component('cards1', {
             this.tasks=filtersList
         }, //удаляет всю карточку
     }
+
 })
 
 let app = new Vue({
