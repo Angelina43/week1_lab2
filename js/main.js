@@ -5,7 +5,7 @@ Vue.component('cards1', {
     props: {
         column1: {
             type: Array
-        }
+        },
     },
         template: `
          <div class="new">
@@ -14,7 +14,7 @@ Vue.component('cards1', {
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
-            <button @click="transferCard">Перенести во 2 столбец</button>
+            <button @click="card2_del">Перенести во 2 столбец</button>
         </li>
         </div>
     `,
@@ -26,8 +26,16 @@ Vue.component('cards1', {
     //         // removeTask: function (index){
     //         //     this.tasks.splice(index,1)
     //         // },
+    methods: {
+        card2_del(index){
+            let desk = this.column1.splice(index,1)
+            let desk2 = desk.pop()
+            this.$emit('card2_trans', desk2);
+        }
+    }
 })
 
+//2 столбец
 Vue.component('card2', {
     props: {
         column2: {
@@ -41,8 +49,35 @@ Vue.component('card2', {
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
+            <button @click="card3_del">Перенести в 3 столбец</button>
         </li>
     </div>
+    `,
+    methods: {
+        card3_del(index){
+            let desk = this.column2.splice(index,1)
+            let desk2 = desk.pop()
+            this.$emit('card3_trans', desk2);
+        }
+    }
+})
+
+//3 столбец
+Vue.component('cards3', {
+    props: {
+        column3: {
+            type: Array
+        },
+    },
+    template: `
+        <div class="done">
+        <li v-for="(cd, index) in column3" :key="index">
+            <p>{{ cd.name }}</p>
+            <p>{{ cd.task1 }}</p>
+            <p>{{ cd.task2 }}</p>
+            <p>{{ cd.task3 }}</p>
+        </li>
+        </div>
     `
 })
 
@@ -70,11 +105,11 @@ let app = new Vue({
                     }
             )
         },
-        card_trans(index){
-            let desk = this.column1.splice(index,1)
-            desk = desk.pop()
-            this.column2.push(desk)
-            console.log(1)
+        card2_tel(desk2) {
+            this.column2.push(desk2)
+        },
+        card3_tel(desk2) {
+            this.column3.push(desk2)
         }
     }
 })
