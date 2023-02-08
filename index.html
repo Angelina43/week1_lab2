@@ -12,13 +12,34 @@
 </head>
 <body>
 <div class="board" id="app">
-    <form-card></form-card>
-    <cards1></cards1>
-<!--    <div class="active">-->
-<!--    </div>-->
+    <div class="create">
+        <form class="create-task" @submit.prevent="addCard">
+            <p>
+                <label for="name">Название карточки:</label>
+                <input id="name" v-model="formCard.name">
+            </p>
+            <p>
+                <label for="task1">Task1:</label>
+                <input id="task1" v-model="formCard.task1">
+            </p>
+            <p>
+                <label for="task2">Task2:</label>
+                <input id="task2" v-model="formCard.task2">
+            </p>
+            <p>
+                <label for="task3">Task3:</label>
+                <input id="task3" v-model="formCard.task3">
+            </p>
+            <input type="submit" value="submit">
+        </form>
+    </div>
+    <cards1 :column1="column1"></cards1>
+    <card2 :column2="column2"></card2>
 
 <!--    <div class="done"></div>-->
 </div>
+
+
 </body>
 </html>
 

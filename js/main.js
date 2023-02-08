@@ -1,119 +1,82 @@
 let eventBus = new Vue()
 
-//форма создания карточки
-Vue.component('form-card', {
-    template: `
-    <div class="create">
-        <form class="create-task" @submit.prevent="create">
-            <p>
-                <label for="name">Название карточки:</label>
-                <input v-model="name" required>
-            </p>
-            <p>
-                <label for="task1">Task1:</label>
-                <input v-model="task1" required>
-            </p>
-            <p>
-                <label for="task2">Task2:</label>
-                <input v-model="task2" required>
-            </p>
-            <p>
-                <label for="task3">Task3:</label>
-                <input v-model="task3" required>
-            </p>            
-            <p>
-                <input @click="addTask() type="submit" value="Отправить">
-            </p>
-        </form>
-    </div>
-    `,
-})
-
 //1 столбец
 Vue.component('cards1', {
     props: {
-        note_data: {
-            type: Object,
-            default() {
-                return {}
-            }
-        },
+        column1: {
+            type: Array
+        }
+    },
         template: `
          <div class="new">
-<!--        <p v-if="!tasks.length">Нет карточек</p>-->
-            <div :tasks="tasks" v-for="(note_data, index) in tasks" :key="index">
-                <div>
-                    <p>{{ note_data.name }}</p>
-                    <p>{{ note_data.task1 }}</p>
-                    <p>{{ note_data.task2 }}</p>
-                    <p>{{ note_data.task3 }}</p>
-                </div>
-            </div>
+        <li v-for="(cd, index) in column1" :key="index">
+            <p>{{ cd.name }}</p>
+            <p>{{ cd.task1 }}</p>
+            <p>{{ cd.task2 }}</p>
+            <p>{{ cd.task3 }}</p>
+            <button>Переместить во второй столбец</button>
+        </li>
         </div>
     `,
-        data() {
-            return {
-                tasks: [],
-                name: null,
-                task1: null,
-                task2: null,
-                task3: null
-            }
-        },
-        methods: {
-            // removeTask: function(task1){
-            //     let filtersList = this.tasks.filter(element => element !== task1)
-            //     this.tasks=filtersList
-            // },
-            // removeTask: function (index){
-            //     this.tasks.splice(index,1)
-            // },
-            addTask() {
-                if (this.name) {
-                    this.note_data.tasks.push({
-                        name: this.name
-                    });
-                    this.name = null;
-                }
-            },
-        }
-    }
-
+    //     methods: {
+    //         // removeTask: function(task1){
+    //         //     let filtersList = this.tasks.filter(element => element !== task1)
+    //         //     this.tasks=filtersList
+    //         // },
+    //         // removeTask: function (index){
+    //         //     this.tasks.splice(index,1)
+    //         // },
 })
 
+Vue.component('card2', {
+    props: {
+        column2: {
+            type: Array
+        }
+    },
+    template: `
+    <div class="active">
+    </div>
+    `
+})
 
 let app = new Vue({
     el: '#app',
     data: {
-        tasks: [],
-        name: null,
-        task1: null,
-        task2: null,
-        task3: null
+        column1: [],
+        column2: [],
+        column3: [],
+        formCard: {
+            name: '',
+            task1: '',
+            task2: '',
+            task3: '',
+        }
     },
     methods: {
-        create() {
-            this.tasks.push({
-                tsk: [
-                    {
-                        name: this.name
-                    },
-                    {
-                        task: this.task1
-                    },
-                    {
-                        task: this.task2
-                    },
-                    {
-                        task: this.task3
+        // addCard(){
+        //     let formTask = {
+        //         name: this.name,
+        //         task1: this.task1,
+        //         task2: this.task2,
+        //         task3: this.task3,
+        //     }
+        //     this.column1.push(formTask)
+        //     this.name = null
+        //     this.task1 = null
+        //     this.task2 = null
+        //     this.task3 = null
+        // }
+        addCard(){
+            this.column1.push(
+                {
+                        name: this.formCard.name,
+                        task1: this.formCard.task1,
+                        task2: this.formCard.task2,
+                        task3: this.formCard.task3,
                     }
-                ],
-            })
-            this.name = null;
-            this.task1 = null;
-            this.task2 = null;
-            this.task3 = null;
+            )
         }
     }
-
 })
+

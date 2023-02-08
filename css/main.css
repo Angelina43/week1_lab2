@@ -18,18 +18,18 @@ body>div{
 
 .new{
     background-color: aquamarine;
-    width: auto;
+    width: 450px;
     height: auto;
 }
 
 .active{
     background-color: darkgrey;
     width: 450px;
-    height: 500px;
+    height: auto;
 }
 
 .done{
     background-color: khaki;
     width: 450px;
-    height: 500px;
+    height: auto;
 }
