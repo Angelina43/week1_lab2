@@ -9,13 +9,13 @@ Vue.component('cards1', {
     },
         template: `
          <div class="new">
-        <li v-for="(cd, index) in column1" :key="index">
-            <p>{{ cd.name }}</p>
+        <ul v-for="(cd, index) in column1" :key="index">
+            <li><p>{{ cd.name }}</p></li>
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
-            <button @click="card2_del">Перенести во 2 столбец</button>
-        </li>
+            <button @click="card2_del(index)">Перенести во 2 столбец</button>
+        </ul>
         </div>
     `,
     //     methods: {
@@ -27,8 +27,8 @@ Vue.component('cards1', {
     //         //     this.tasks.splice(index,1)
     //         // },
     methods: {
-        card2_del(index){
-            let desk = this.column1.splice(index,1)
+        card2_del(id){
+            let desk = this.column1.splice(id,1)
             let desk2 = desk.pop()
             this.$emit('card2_trans', desk2);
         }
@@ -44,18 +44,18 @@ Vue.component('card2', {
     },
     template: `
     <div class="active">
-        <li v-for="(cd, index) in column2" :key="index">
-            <p>{{ cd.name }}</p>
+        <ul v-for="(cd, index) in column2" :key="index">
+            <li><p>{{ cd.name }}</p></li>
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
-            <button @click="card3_del">Перенести в 3 столбец</button>
-        </li>
+            <button @click="card3_del(index)">Перенести в 3 столбец</button>
+        </ul>
     </div>
     `,
     methods: {
-        card3_del(index){
-            let desk = this.column2.splice(index,1)
+        card3_del(id){
+            let desk = this.column2.splice(id,1)
             let desk2 = desk.pop()
             this.$emit('card3_trans', desk2);
         }
@@ -71,12 +71,12 @@ Vue.component('cards3', {
     },
     template: `
         <div class="done">
-        <li v-for="(cd, index) in column3" :key="index">
-            <p>{{ cd.name }}</p>
+        <ul v-for="(cd, index) in column3" :key="index">
+            <li><p>{{ cd.name }}</p></li>
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
-        </li>
+        </ul>
         </div>
     `
 })
@@ -84,8 +84,22 @@ Vue.component('cards3', {
 let app = new Vue({
     el: '#app',
     data: {
-        column1: [],
-        column2: [],
+        column1: [
+            {
+                name: 'Кот',
+                task1: 'Допустим',
+                task2: 'Я сказал',
+                task3: 'Мяу'
+            }
+        ],
+        column2: [
+            {
+                name: 'Собака',
+                task1: 'Допустим',
+                task2: 'Я ответил',
+                task3: 'Гав'
+            }
+        ],
         column3: [],
         formCard: {
             name: '',
@@ -96,20 +110,34 @@ let app = new Vue({
     },
     methods: {
         addCard(){
-            this.column1.push(
-                {
+            if(this.column1.length < 3){
+                this.column1.push(
+                    {
                         name: this.formCard.name,
                         task1: this.formCard.task1,
                         task2: this.formCard.task2,
                         task3: this.formCard.task3,
                     }
-            )
+                )
+            }
+            else {
+                alert('Превышен ввод')
+            }
         },
         card2_tel(desk2) {
-            this.column2.push(desk2)
+            if(this.column2.length < 5) {
+                this.column2.push(desk2)
+            }
+            else {
+                alert('Превышен ввод')
+                this.column1.push(desk2)
+            }
         },
         card3_tel(desk2) {
             this.column3.push(desk2)
+        },
+        count_length(){
+            console.log(this.column1.length)
         }
     }
 })

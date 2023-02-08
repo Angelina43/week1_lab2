@@ -6,7 +6,7 @@ body>div{
 }
 
 .create{
-    background-color: cadetblue;
+    background-color: #ffc09e;
     display: flex;
     flex-direction: column;
     width: 350px;
@@ -17,19 +17,19 @@ body>div{
 }
 
 .new{
-    background-color: aquamarine;
+    background-color: #fb7f71;
     width: 450px;
     height: auto;
 }
 
 .active{
-    background-color: darkgrey;
+    background-color: #a75151;
     width: 450px;
     height: auto;
 }
 
 .done{
-    background-color: khaki;
+    background-color: #7e515a;
     width: 450px;
     height: auto;
 }
