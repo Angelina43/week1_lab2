@@ -14,7 +14,7 @@ Vue.component('cards1', {
             <p>{{ cd.task1 }}</p>
             <p>{{ cd.task2 }}</p>
             <p>{{ cd.task3 }}</p>
-            <button>Переместить во второй столбец</button>
+            <button @click="transferCard">Перенести во 2 столбец</button>
         </li>
         </div>
     `,
@@ -36,6 +36,12 @@ Vue.component('card2', {
     },
     template: `
     <div class="active">
+        <li v-for="(cd, index) in column2" :key="index">
+            <p>{{ cd.name }}</p>
+            <p>{{ cd.task1 }}</p>
+            <p>{{ cd.task2 }}</p>
+            <p>{{ cd.task3 }}</p>
+        </li>
     </div>
     `
 })
@@ -54,19 +60,6 @@ let app = new Vue({
         }
     },
     methods: {
-        // addCard(){
-        //     let formTask = {
-        //         name: this.name,
-        //         task1: this.task1,
-        //         task2: this.task2,
-        //         task3: this.task3,
-        //     }
-        //     this.column1.push(formTask)
-        //     this.name = null
-        //     this.task1 = null
-        //     this.task2 = null
-        //     this.task3 = null
-        // }
         addCard(){
             this.column1.push(
                 {
@@ -76,6 +69,12 @@ let app = new Vue({
                         task3: this.formCard.task3,
                     }
             )
+        },
+        card_trans(index){
+            let desk = this.column1.splice(index,1)
+            desk = desk.pop()
+            this.column2.push(desk)
+            console.log(1)
         }
     }
 })
