@@ -19,13 +19,13 @@ Vue.component('tapok',{
     },
     methods: {
         task1_del(){
-            this.$emit('card2_trans');
+            this.$emit('card2_trans')
         },
         task2_del(){
-            this.$emit('card2_trans');
+            this.$emit('card2_trans')
         },
         task3_del(){
-            this.$emit('card2_trans');
+            this.$emit('card2_trans')
         },
 
     }
@@ -52,13 +52,9 @@ Vue.component('cards1', {
     },
     methods: {
         card2_del(id){ //тут условие для перебора
-            let i = 0
             let desk = this.column1.splice(id,1)
-            if(desk = desk.pop()) {
-                   i += 1
-                console.log(i)
-            }
-            // this.$emit('card2_trans', desk);
+            desk = desk.pop()
+            this.$emit('card2_trans', desk);
         },
 
         // task1_del(index){
