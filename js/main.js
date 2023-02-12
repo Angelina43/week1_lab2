@@ -1,13 +1,11 @@
 let eventBus = new Vue()
 
-Vue.component('tapok',{
-    props: ['data', 'column1','column2','column3'],
+Vue.component('tapok', {
+    props: ['data'],
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p>{{ data.task1 }} <button v-if="!isHidden1" v-on:click="isHidden1 = true" @click="task1_del">Выполнить</button></p> 
-        <p>{{ data.task2 }} <button v-if="!isHidden2" v-on:click="isHidden2 = true" @click="task2_del">Выполнить</button></p>
-        <p>{{ data.task3 }} <button v-if="!isHidden3" v-on:click="isHidden3 = true" @click="task3_del">Выполнить</button></p>
+        <p v-for="(data, index) in data.tasks" :key="index">{{ data.name }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data)">Выполнить</button></p> 
     </div>
     `,
     data() {
@@ -18,14 +16,9 @@ Vue.component('tapok',{
         }
     },
     methods: {
-        task1_del(){
-            this.$emit('card2_trans')
-        },
-        task2_del(){
-            this.$emit('card2_trans')
-        },
-        task3_del(){
-            this.$emit('card2_trans')
+        task_del(task) {
+            // console.log(task);
+            this.$emit('card2_trans', task)
         },
 
     }
@@ -36,9 +29,9 @@ Vue.component('cards1', {
     props: {
         column1: {
             type: Array
-        }
+        },
     },
-        template: `
+    template: `
          <div class="new">
         <ul>
             <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column1" :key="index"></tapok>
@@ -46,39 +39,30 @@ Vue.component('cards1', {
         </div>
     `,
     data() {
-        return{
+        return {
             task: [],
         }
     },
     methods: {
-        card2_del(id){ //тут условие для перебора
-            let desk = this.column1.splice(id,1)
-            desk = desk.pop()
-            this.$emit('card2_trans', desk);
-        },
+        card2_del(tasks) {
+            //  let desk = this.column1[id]
+            // desk = desk.pop()
+            // this.$emit('card2_trans', desk);
+            let task1 = []
+            let count = 0
+            task1.push(this.column1[0].tasks[0])
+            for (this.visible in this.column1[0].tasks) {
+                if (this.visible !== true) console.log('visible не равно true')
+            }
 
-        // task1_del(index){
-        //         let task1 = this.column1[index].task1
-        //         this.task.push(task1)
-        //         console.log(this.task)
-        // },
-        // task2_del(index){
-        //     let task2 = this.column1[index].task2
-        //     this.task.push(task2)
-        //     console.log(this.task)
-        // },
-        // task3_del(index){
-        //     let task3 = this.column1[index].task3
-        //     this.task.push(task3)
-        //     console.log(this.task)
-        //
-        // },
-        // task_simile(index) {
-        //     if(this.column1.length < (this.task.length)){
-        //         console.log(this.column1.length)
-        //         console.log(this.task.length)
-        //     }
-        // }
+            console.log('Задачи: ', this.column1[0].tasks)
+            console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
+            console.log('Длина массива: ', this.column1[0].tasks.length)
+            console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
+            console.log('Значение по id', task1)
+
+
+        },
     }
 })
 
@@ -92,7 +76,7 @@ Vue.component('card2', {
     template: `
     <div class="active">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column2" :key="index"></tapok>
+            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column2" :key="index"></tapok>
         </ul>
     </div>
     `,
@@ -104,7 +88,7 @@ Vue.component('card2', {
         }
     },
 })
-
+/*
 //3 столбец
 Vue.component('cards3', {
     props: {
@@ -119,7 +103,7 @@ Vue.component('cards3', {
         </ul>
         </div>
     `
-})
+})*/
 
 let app = new Vue({
     el: '#app',
@@ -127,20 +111,32 @@ let app = new Vue({
         column1: [
             {
                 name: 'Кот',
-                task1: 'Допустим',
-                task2: 'Я сказал',
-                task3: 'Мяу'
+                tasks: [
+                    {name: 'Допустим', visible: true},
+                    {name: 'Я сказал', visible: true},
+                    {name: 'Мяу', visible: true}
+                ]
+            },
+            {
+                name: 'Птица',
+                tasks: [
+                    {name: 'Допустим', visible: true},
+                    {name: 'Я испугался и сказал', visible: true},
+                    {name: 'Пока', visible: true}
+                ]
             }
         ],
         column2: [
             {
                 name: 'Собака',
-                task1: 'Допустим',
-                task2: 'Я ответил',
-                task3: 'Гав'
+                tasks: [
+                    {name: 'Допустим'},
+                    {name: 'Я ответил'},
+                    {name: 'Гав'}
+                ]
             }
         ],
-        column3: [],
+        // column3: [],
         formCard: {
             name: '',
             task1: '',
@@ -149,8 +145,8 @@ let app = new Vue({
         },
     },
     methods: {
-        addCard(){
-            if(this.column1.length < 3){
+        addCard() {
+            if (this.column1.length < 3) {
                 this.column1.push(
                     {
                         name: this.formCard.name,
@@ -165,17 +161,16 @@ let app = new Vue({
                 this.formCard.task3 = null
             }
         },
-        card2_tel(desk) {
-            if(this.column2.length < 5) {
-                this.column2.push(desk)
-            }
-            else {
-                this.column1.push(desk)
-            }
-        },
-        card3_tel(desk) {
-            this.column3.push(desk)
-        }
+        // card2_tel(desk) {
+        //     if (this.column2.length < 5) {
+        //         this.column2.push(desk)
+        //     } else {
+        //         this.column1.push(desk)
+        //     }
+        // },
+        // card3_tel(desk) {
+        //     this.column3.push(desk)
+        // }
     }
 })
 
