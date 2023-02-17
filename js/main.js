@@ -48,19 +48,26 @@ Vue.component('cards1', {
             //  let desk = this.column1[id]
             // desk = desk.pop()
             // this.$emit('card2_trans', desk);
-            let task1 = []
-            let count = 0
-            task1.push(this.column1[0].tasks[0])
-            for (this.visible in this.column1[0].tasks) {
-                if (this.visible !== true) console.log('visible не равно true')
+
+
+            let count1 = 0
+            for (let key in tasks){
+                console.log('Ключ: ' + key + ' значение: ' + tasks[key])
+                if (!tasks[key]) {
+                    count1++
+                    console.log(count1)
+                }
             }
 
-            console.log('Задачи: ', this.column1[0].tasks)
-            console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
-            console.log('Длина массива: ', this.column1[0].tasks.length)
-            console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
-            console.log('Значение по id', task1)
 
+            // let task1 = []
+            // let count = 0
+            // task1.push(this.column1[0].tasks[0])
+            // console.log('Задачи: ', this.column1[0].tasks)
+            // console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
+            // console.log('Длина массива: ', this.column1[0].tasks.length)
+            // console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
+            // console.log('Значение по id', task1)
 
         },
     }
