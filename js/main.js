@@ -5,7 +5,7 @@ Vue.component('tapok', {
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index) in data.tasks" :key="index">{{ data.name }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data)">Выполнить</button></p> 
+        <p v-for="(data, index) in data.tasks" :key="index">{{ data.name }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data, index)">Выполнить</button></p> 
     </div>
     `,
     data() {
@@ -16,9 +16,10 @@ Vue.component('tapok', {
         }
     },
     methods: {
-        task_del(task) {
-            this.$emit('card2_trans', task)
+        task_del(task, index) {
+            this.$emit('card2_trans', task, index)
         },
+
 
     }
 })
@@ -43,7 +44,7 @@ Vue.component('cards1', {
         }
     },
     methods: {
-        card2_del(tasks) {
+        card2_del(tasks, index) {
             //  let desk = this.column1[id]
             // desk = desk.pop()
             // this.$emit('card2_trans', desk);
@@ -56,8 +57,8 @@ Vue.component('cards1', {
                 allTasks ++
                 if (tasks[key] === false) {
                    completeTask +=1
-                   this.column[0].count +=1
-                    console.log(this.column[0].count)
+                   this.column[index].count +=1
+                    console.log(this.column[index].count)
                     console.log(allTasks)
                 }
             }
@@ -67,7 +68,8 @@ Vue.component('cards1', {
             // let task1 = []
             // let count = 0
             // task1.push(this.column1[0].tasks[0])
-            // console.log('Задачи: ', this.column1[0].tasks)
+            console.log('Задачи: ', this.column[1].tasks[1])
+            console.log('Задачи23: ', this.column[index].tasks)
             // console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
             // console.log('Длина массива: ', this.column1[0].tasks.length)
             // console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
@@ -131,7 +133,7 @@ let app = new Vue({
             },
             {
                 name: 'Птица',
-
+                count: 0,
                 tasks: [
                     {name: 'Допустим', visible: true},
                     {name: 'Я испугался и сказал', visible: true},
