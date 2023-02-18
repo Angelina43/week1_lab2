@@ -17,7 +17,6 @@ Vue.component('tapok', {
     },
     methods: {
         task_del(task) {
-            // console.log(task);
             this.$emit('card2_trans', task)
         },
 
@@ -27,20 +26,20 @@ Vue.component('tapok', {
 //1 столбец
 Vue.component('cards1', {
     props: {
-        column1: {
+        column: {
             type: Array
-        },
+        }
     },
     template: `
          <div class="new">
         <ul>
-            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column1" :key="index"></tapok>
+            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column" :key="index"></tapok>
         </ul>
         </div>
     `,
     data() {
         return {
-            task: [],
+
         }
     },
     methods: {
@@ -48,16 +47,21 @@ Vue.component('cards1', {
             //  let desk = this.column1[id]
             // desk = desk.pop()
             // this.$emit('card2_trans', desk);
+            let allTasks = 0;
+            let completeTask = 0;
 
 
-            let count1 = 0
             for (let key in tasks){
                 console.log('Ключ: ' + key + ' значение: ' + tasks[key])
-                if (!tasks[key]) {
-                    count1++
-                    console.log(count1)
+                allTasks ++
+                if (tasks[key] === false) {
+                   completeTask +=1
+                   this.column[0].count +=1
+                    console.log(this.column[0].count)
+                    console.log(allTasks)
                 }
             }
+            console.log(this.column)
 
 
             // let task1 = []
@@ -83,13 +87,13 @@ Vue.component('card2', {
     template: `
     <div class="active">
         <ul>
-            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column2" :key="index"></tapok>
+            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column" :key="index"></tapok>
         </ul>
     </div>
     `,
     methods: {
         card3_del(id){
-            let desk = this.column2.splice(id,1)
+            let desk = this.column.splice(id,1)
             desk = desk.pop()
             this.$emit('card3_trans', desk);
         }
@@ -118,6 +122,7 @@ let app = new Vue({
         column1: [
             {
                 name: 'Кот',
+                count: 0,
                 tasks: [
                     {name: 'Допустим', visible: true},
                     {name: 'Я сказал', visible: true},
@@ -126,6 +131,7 @@ let app = new Vue({
             },
             {
                 name: 'Птица',
+
                 tasks: [
                     {name: 'Допустим', visible: true},
                     {name: 'Я испугался и сказал', visible: true},
