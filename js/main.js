@@ -63,7 +63,7 @@ Vue.component('cards1', {
                 }
             }
             console.log(this.column)
-
+            //коммент
 
             // let task1 = []
             // let count = 0
