@@ -5,7 +5,7 @@ Vue.component('tapok', {
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index) in data.tasks" :key="index">{{ data.name }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data, index)">Выполнить</button></p> 
+        <p v-for="(data, index) in data.tasks" :key="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data, index)">Выполнить</button></p> 
     </div>
     `,
     data() {
@@ -50,26 +50,28 @@ Vue.component('cards1', {
             // this.$emit('card2_trans', desk);
             let allTasks = 0;
             let completeTask = 0;
-
+            let notCompleteTask = 0;
 
             for (let key in tasks){
                 console.log('Ключ: ' + key + ' значение: ' + tasks[key])
-                allTasks ++
+                    allTasks ++
                 if (tasks[key] === false) {
                    completeTask +=1
-                   this.column[index].count +=1
-                    console.log(this.column[index].count)
+                   this.column[0].count +=1 //подсчет индекса
+                    console.log(this.column[0].count)
                     console.log(allTasks)
                 }
             }
-            console.log(this.column)
+
+
+            // console.log(this.column)
             //коммент
 
             // let task1 = []
             // let count = 0
             // task1.push(this.column1[0].tasks[0])
-            console.log('Задачи: ', this.column[1].tasks[1])
-            console.log('Задачи23: ', this.column[index].tasks)
+            // console.log('Задачи: ', this.column[1].tasks[1])
+            // console.log('Задачи23: ', this.column[index].tasks)
             // console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
             // console.log('Длина массива: ', this.column1[0].tasks.length)
             // console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
@@ -93,13 +95,13 @@ Vue.component('card2', {
         </ul>
     </div>
     `,
-    methods: {
-        card3_del(id){
-            let desk = this.column.splice(id,1)
-            desk = desk.pop()
-            this.$emit('card3_trans', desk);
-        }
-    },
+    // methods: {
+    //     card3_del(id){
+    //         let desk = this.column.splice(id,1)
+    //         desk = desk.pop()
+    //         this.$emit('card3_trans', desk);
+    //     }
+    // },
 })
 /*
 //3 столбец
@@ -126,18 +128,18 @@ let app = new Vue({
                 name: 'Кот',
                 count: 0,
                 tasks: [
-                    {name: 'Допустим', visible: true},
-                    {name: 'Я сказал', visible: true},
-                    {name: 'Мяу', visible: true}
+                    {taskname: 'Допустим', visible: true},
+                    {taskname: 'Я сказал', visible: true},
+                    {taskname: 'Мяу', visible: true}
                 ]
             },
             {
                 name: 'Птица',
                 count: 0,
                 tasks: [
-                    {name: 'Допустим', visible: true},
-                    {name: 'Я испугался и сказал', visible: true},
-                    {name: 'Пока', visible: true}
+                    {taskname: 'Допустим', visible: true},
+                    {taskname: 'Я испугался и сказал', visible: true},
+                    {taskname: 'Пока', visible: true}
                 ]
             }
         ],
@@ -145,18 +147,19 @@ let app = new Vue({
             {
                 name: 'Собака',
                 tasks: [
-                    {name: 'Допустим'},
-                    {name: 'Я ответил'},
-                    {name: 'Гав'}
+                    {taskname: 'Допустим'},
+                    {taskname: 'Я ответил'},
+                    {taskname: 'Гав'}
                 ]
             }
         ],
         // column3: [],
         formCard: {
-            name: '',
-            task1: '',
-            task2: '',
-            task3: '',
+            name: null,
+            task1: null,
+            task2: null,
+            task3: null,
+            visible: null,
         },
     },
     methods: {
@@ -165,15 +168,27 @@ let app = new Vue({
                 this.column1.push(
                     {
                         name: this.formCard.name,
-                        task1: this.formCard.task1,
-                        task2: this.formCard.task2,
-                        task3: this.formCard.task3,
+                        tasks: [
+                            {
+                                taskname: this.formCard.task1,
+                                visible: true,
+                            },
+                            {
+                                taskname: this.formCard.task2,
+                                visible: true,
+                            },
+                            {
+                                taskname: this.formCard.task3,
+                                visible: true,
+                            }
+                        ]
                     }
                 )
-                this.formCard.name = null
-                this.formCard.task1 = null
-                this.formCard.task2 = null
-                this.formCard.task3 = null
+                this.formCard.name = '';
+                this.formCard.task1 = '';
+                this.formCard.task2 = '';
+                this.formCard.task3 = '';
+                this.formCard.visible = '';
             }
         },
         // card2_tel(desk) {
