@@ -69,7 +69,7 @@ Vue.component('column1', {
     template: `
          <div class="new">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column1" :id="index"></tapok>
+            <tapok :data="data" @save="save()" v-for="(data, index) in column1" :id="index"></tapok>
         </ul>
         </div>
     `,
@@ -94,7 +94,7 @@ Vue.component('column2', {
     template: `
     <div class="active">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column2" :id="index"></tapok>
+            <tapok :data="data" @save="save()" v-for="(data, index) in column2" :id="index"></tapok>
         </ul>
     </div>
     `,
@@ -114,7 +114,7 @@ Vue.component('column3', {
     template: `
         <div class="done">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column3" :id="index"></tapok>
+            <tapok :data="data" @save="save()" v-for="(data, index) in column3" :id="index"></tapok>
         </ul>
         </div>
     `
@@ -166,22 +166,40 @@ let app = new Vue({
                 this.formCard.task3 = '';
                 this.formCard.visible = '';
                 this.formCard.completed = '';
+                this.save()
             }
+        },
+        save() {
+            localStorage.column1 = JSON.stringify(this.column1)
+            localStorage.column2 = JSON.stringify(this.column2)
+            localStorage.column3 = JSON.stringify(this.column3)
         },
     },
 
     mounted() {
+        if (localStorage.column1) {
+            this.column1 = JSON.parse(localStorage.column1)
+        }
+        if (localStorage.column2) {
+            this.column2 = JSON.parse(localStorage.column2)
+        }
+        if (localStorage.column3) {
+            this.thirdCol = JSON.parse(localStorage.column3)
+        }
         eventBus.$on('move-column2', (id) => {
-            if (this.column1[id].completedNum >= 50) {
-                this.column2.push(this.column1[id])
-                this.column1.splice(id, 1)
+            if (this.column2.length < 5) {
+                if (this.column1[id].completedNum >= 50) {
+                    this.column2.push(this.column1[id])
+                    this.column1.splice(id, 1)
+                    this.save()
+                }
             }
-
         });
         eventBus.$on('move-column3', (id) => {
             if (this.column2[id].completedNum === 100) {
                 this.column3.push(this.column2[id])
                 this.column2.splice(id, 1)
+                this.save()
             }
         })
     }
