@@ -1,11 +1,25 @@
 let eventBus = new Vue()
 
+//карточка с задачами
 Vue.component('tapok', {
-    props: ['data'],
+    props: {
+        tapok: {
+            type: Object,
+        },
+        id: {
+            type: Number,
+        },
+        data: {
+            type: Object,
+            default() {
+                return {}
+            }
+        }
+    },
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index) in data.tasks" :key="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_del(data, index)">Выполнить</button></p> 
+        <p v-for="(data, index) in data.tasks" :id="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_update(data, index)">Выполнить</button></p> 
     </div>
     `,
     data() {
@@ -16,100 +30,83 @@ Vue.component('tapok', {
         }
     },
     methods: {
-        task_del(task, index) {
-            this.$emit('card2_trans', task, index)
-        },
+        task_update(task, index, id) {
+            this.data.tasks[index].completed = !this.data.tasks[index].completed;
 
-
-    }
+            let counterComp = 0;
+            let counterNotComp = 0;
+            for (let f of this.data.tasks) {
+                if (f.completed) {
+                    counterComp++;
+                } else {
+                    counterNotComp++;
+                }
+            }
+            this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
+            if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
+            console.log(this.data.completedNum, this.data.tasks[index], this.data.tasks)
+        }
+    },
 })
 
 //1 столбец
-Vue.component('cards1', {
+Vue.component('column1', {
     props: {
-        column: {
+        column1: {
             type: Array
-        }
+        },
+        tapok: {
+            type: Array
+        },
+        data() {
+            return {}
+        },
     },
     template: `
          <div class="new">
         <ul>
-            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column" :key="index"></tapok>
+            <tapok :data="data" v-for="(data, index) in column1" :key="index"></tapok>
         </ul>
         </div>
     `,
     data() {
         return {
-
+            taskname: null,
+            tasks: []
         }
     },
-    methods: {
-        card2_del(tasks, index) {
-            //  let desk = this.column1[id]
-            // desk = desk.pop()
-            // this.$emit('card2_trans', desk);
-            let allTasks = 0;
-            let completeTask = 0;
-            let notCompleteTask = 0;
-
-            for (let key in tasks){
-                console.log('Ключ: ' + key + ' значение: ' + tasks[key])
-                    allTasks ++
-                if (tasks[key] === false) {
-                   completeTask +=1
-                   this.column[0].count +=1 //подсчет индекса
-                    console.log(this.column[0].count)
-                    console.log(allTasks)
-                }
-            }
-
-
-            // console.log(this.column)
-            //коммент
-
-            // let task1 = []
-            // let count = 0
-            // task1.push(this.column1[0].tasks[0])
-            // console.log('Задачи: ', this.column[1].tasks[1])
-            // console.log('Задачи23: ', this.column[index].tasks)
-            // console.log('Индекс элемента: ', this.column1[0].tasks.indexOf(tasks))
-            // console.log('Длина массива: ', this.column1[0].tasks.length)
-            // console.log('Половина длины массива: ', (this.column1[0].tasks.length)/2)
-            // console.log('Значение по id', task1)
-
-        },
-    }
+    methods: {},
 })
 
 //2 столбец
-Vue.component('card2', {
+Vue.component('column2', {
     props: {
         column2: {
             type: Array
         }
     },
+    data() {
+        return {}
+    },
     template: `
     <div class="active">
         <ul>
-            <tapok :data="data" @card2_trans="card2_del" v-for="(data, index) in column" :key="index"></tapok>
+            <tapok :data="data" v-for="(data, index) in column2" :key="index"></tapok>
         </ul>
     </div>
     `,
-    // methods: {
-    //     card3_del(id){
-    //         let desk = this.column.splice(id,1)
-    //         desk = desk.pop()
-    //         this.$emit('card3_trans', desk);
-    //     }
-    // },
+    methods: {}
 })
-/*
+
 //3 столбец
-Vue.component('cards3', {
+Vue.component('column3', {
     props: {
         column3: {
             type: Array
         },
+    },
+    data() {
+        return {}
     },
     template: `
         <div class="done">
@@ -118,7 +115,7 @@ Vue.component('cards3', {
         </ul>
         </div>
     `
-})*/
+})
 
 let app = new Vue({
     el: '#app',
@@ -126,16 +123,15 @@ let app = new Vue({
         column1: [
             {
                 name: 'Кот',
-                count: 0,
                 tasks: [
-                    {taskname: 'Допустим', visible: true},
-                    {taskname: 'Я сказал', visible: true},
-                    {taskname: 'Мяу', visible: true}
+                    {taskname: 'Допустим', visible: true, completed: false},
+                    {taskname: 'Я сказал', visible: true, completed: false},
+                    {taskname: 'Мяу', visible: true, completed: false}
                 ]
             },
             {
                 name: 'Птица',
-                count: 0,
+                completed: false,
                 tasks: [
                     {taskname: 'Допустим', visible: true},
                     {taskname: 'Я испугался и сказал', visible: true},
@@ -143,23 +139,15 @@ let app = new Vue({
                 ]
             }
         ],
-        column2: [
-            {
-                name: 'Собака',
-                tasks: [
-                    {taskname: 'Допустим'},
-                    {taskname: 'Я ответил'},
-                    {taskname: 'Гав'}
-                ]
-            }
-        ],
-        // column3: [],
+        column2: [],
+        column3: [],
         formCard: {
             name: null,
             task1: null,
             task2: null,
             task3: null,
             visible: null,
+            completed: false
         },
     },
     methods: {
@@ -172,14 +160,17 @@ let app = new Vue({
                             {
                                 taskname: this.formCard.task1,
                                 visible: true,
+                                completed: false
                             },
                             {
                                 taskname: this.formCard.task2,
                                 visible: true,
+                                completed: false
                             },
                             {
                                 taskname: this.formCard.task3,
                                 visible: true,
+                                completed: false
                             }
                         ]
                     }
@@ -189,18 +180,9 @@ let app = new Vue({
                 this.formCard.task2 = '';
                 this.formCard.task3 = '';
                 this.formCard.visible = '';
+                this.formCard.completed = '';
             }
         },
-        // card2_tel(desk) {
-        //     if (this.column2.length < 5) {
-        //         this.column2.push(desk)
-        //     } else {
-        //         this.column1.push(desk)
-        //     }
-        // },
-        // card3_tel(desk) {
-        //     this.column3.push(desk)
-        // }
-    }
+    },
 })
 

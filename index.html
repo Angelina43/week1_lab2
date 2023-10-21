@@ -8,7 +8,7 @@
     <title>Document</title>
     <script defer src="js/vue.js"></script>
     <link rel="stylesheet" href="css/main.css">
-    <script  defer src="js/main.js"></script>
+    <script defer src="js/main.js"></script>
 </head>
 <body>
 <div class="board" id="app">
@@ -16,31 +16,29 @@
         <form class="create-task" @submit.prevent="addCard">
             <p>
                 <label for="name">Название карточки:</label>
-                <input id="name" v-model="formCard.name">
+                <input id="name" v-model="formCard.name" required>
             </p>
             <p>
                 <label for="task1">Task1:</label>
-                <input id="task1" v-model="formCard.task1">
+                <input id="task1" v-model="formCard.task1" required>
             </p>
             <p>
                 <label for="task2">Task2:</label>
-                <input id="task2" v-model="formCard.task2">
+                <input id="task2" v-model="formCard.task2" required>
             </p>
             <p>
                 <label for="task3">Task3:</label>
-                <input id="task3" v-model="formCard.task3">
+                <input id="task3" v-model="formCard.task3" required>
             </p>
             <input type="submit" value="submit">
         </form>
     </div>
 
-    <cards1 :column="column1"></cards1>
-<!--    @card2_trans="card2_tel"-->
+    <column1 :column1="column1"></column1>
 
-    <card2 :column="column2"></card2>
-<!--    @card3_trans="card3_tel"-->
+    <column2 :column2="column2"></column2>
 
-    <!--    <cards3 :column3="column3"></cards3>-->
+    <column3 :column3="column3"></column3>
 </div>
 
 
