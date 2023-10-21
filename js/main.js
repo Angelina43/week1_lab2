@@ -30,22 +30,6 @@ Vue.component('tapok', {
         }
     },
     methods: {
-        //     task_update(task, index, id) {
-        //         this.data.tasks[index].completed = !this.data.tasks[index].completed;
-        //
-        //         let counterComp = 0;
-        //         let counterNotComp = 0;
-        //         for (let f of this.data.tasks) {
-        //             if (f.completed) {
-        //                 counterComp++;
-        //             } else {
-        //                 counterNotComp++;
-        //             }
-        //         }
-        //         this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
-        //         if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
-        //         console.log(this.data.completedNum, this.data.tasks[index], this.data.tasks)
-        //     },
         task_update(id) {
             this.data.tasks[id].completed = !this.data.tasks[id].completed
             eventBus.$emit('update-checkbox', this.id)
@@ -130,7 +114,7 @@ Vue.component('column3', {
     template: `
         <div class="done">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column3" :key="index"></tapok>
+            <tapok :data="data" v-for="(data, index) in column3" :id="index"></tapok>
         </ul>
         </div>
     `
@@ -194,6 +178,12 @@ let app = new Vue({
             }
 
         });
+        eventBus.$on('move-column3', (id) => {
+            if (this.column2[id].completedNum === 100) {
+                this.column3.push(this.column2[id])
+                this.column2.splice(id, 1)
+            }
+        })
     }
 })
 
