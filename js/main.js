@@ -174,6 +174,11 @@ let app = new Vue({
             localStorage.column2 = JSON.stringify(this.column2)
             localStorage.column3 = JSON.stringify(this.column3)
         },
+        time(id) {
+            let timeData = new Date();
+            this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
+            this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
+        },
     },
 
     mounted() {
@@ -197,6 +202,7 @@ let app = new Vue({
         });
         eventBus.$on('move-column3', (id) => {
             if (this.column2[id].completedNum === 100) {
+                this.time(id)
                 this.column3.push(this.column2[id])
                 this.column2.splice(id, 1)
                 this.save()
