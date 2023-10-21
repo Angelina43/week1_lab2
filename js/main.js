@@ -46,8 +46,8 @@ Vue.component('tapok', {
         //         if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
         //         console.log(this.data.completedNum, this.data.tasks[index], this.data.tasks)
         //     },
-        task_update(index) {
-            this.data.tasks[index].completed = !this.data.tasks[index].completed
+        task_update(id) {
+            this.data.tasks[id].completed = !this.data.tasks[id].completed
             eventBus.$emit('update-checkbox', this.id)
         }
     },
@@ -64,6 +64,7 @@ Vue.component('tapok', {
             }
             this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
             if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
+            if (this.data.completedNum === 100) eventBus.$emit('move-column3', id, this.data);
         })
     }
 })
@@ -77,17 +78,14 @@ Vue.component('column1', {
         tapok: {
             type: Array
         },
-        completedNum: {
+        id: {
             type: Number
-        },
-        data() {
-            return {}
         },
     },
     template: `
          <div class="new">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column1" :key="index"></tapok>
+            <tapok :data="data" v-for="(data, index) in column1" :id="index"></tapok>
         </ul>
         </div>
     `,
@@ -96,16 +94,6 @@ Vue.component('column1', {
             taskname: null,
             tasks: [],
         }
-    },
-    mounted() {
-        eventBus.$on('move-column2', (id, tapok) => {
-            // if (this.data.completedNum >= 50) {
-                // this.secondCol.push(this.firstCol[idNote])
-                // this.firstCol.splice(idNote, 1)
-                // this.save()
-            // }
-            console.log(1)
-        });
     }
 })
 
@@ -122,7 +110,7 @@ Vue.component('column2', {
     template: `
     <div class="active">
         <ul>
-            <tapok :data="data" v-for="(data, index) in column2" :key="index"></tapok>
+            <tapok :data="data" v-for="(data, index) in column2" :id="index"></tapok>
         </ul>
     </div>
     `,
@@ -168,7 +156,6 @@ let app = new Vue({
             if (this.column1.length < 3) {
                 this.column1.push(
                     {
-                        tapok: this.tapok,
                         name: this.formCard.name,
                         tasks: [
                             {
@@ -198,5 +185,15 @@ let app = new Vue({
             }
         },
     },
+
+    mounted() {
+        eventBus.$on('move-column2', (id) => {
+            if (this.column1[id].completedNum >= 50) {
+                this.column2.push(this.column1[id])
+                this.column1.splice(id, 1)
+            }
+
+        });
+    }
 })
 
