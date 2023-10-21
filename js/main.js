@@ -19,7 +19,7 @@ Vue.component('tapok', {
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index) in data.tasks" :id="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_update(data, index)">Выполнить</button></p> 
+        <p v-for="(data, index) in data.tasks" :id="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_update(index)">Выполнить</button></p>
     </div>
     `,
     data() {
@@ -30,9 +30,29 @@ Vue.component('tapok', {
         }
     },
     methods: {
-        task_update(task, index, id) {
-            this.data.tasks[index].completed = !this.data.tasks[index].completed;
-
+        //     task_update(task, index, id) {
+        //         this.data.tasks[index].completed = !this.data.tasks[index].completed;
+        //
+        //         let counterComp = 0;
+        //         let counterNotComp = 0;
+        //         for (let f of this.data.tasks) {
+        //             if (f.completed) {
+        //                 counterComp++;
+        //             } else {
+        //                 counterNotComp++;
+        //             }
+        //         }
+        //         this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
+        //         if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
+        //         console.log(this.data.completedNum, this.data.tasks[index], this.data.tasks)
+        //     },
+        task_update(index) {
+            this.data.tasks[index].completed = !this.data.tasks[index].completed
+            eventBus.$emit('update-checkbox', this.id)
+        }
+    },
+    mounted() {
+        eventBus.$on('update-checkbox', id => {
             let counterComp = 0;
             let counterNotComp = 0;
             for (let f of this.data.tasks) {
@@ -44,9 +64,8 @@ Vue.component('tapok', {
             }
             this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
             if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
-            console.log(this.data.completedNum, this.data.tasks[index], this.data.tasks)
-        }
-    },
+        })
+    }
 })
 
 //1 столбец
@@ -57,6 +76,9 @@ Vue.component('column1', {
         },
         tapok: {
             type: Array
+        },
+        completedNum: {
+            type: Number
         },
         data() {
             return {}
@@ -72,10 +94,19 @@ Vue.component('column1', {
     data() {
         return {
             taskname: null,
-            tasks: []
+            tasks: [],
         }
     },
-    methods: {},
+    mounted() {
+        eventBus.$on('move-column2', (id, tapok) => {
+            // if (this.data.completedNum >= 50) {
+                // this.secondCol.push(this.firstCol[idNote])
+                // this.firstCol.splice(idNote, 1)
+                // this.save()
+            // }
+            console.log(1)
+        });
+    }
 })
 
 //2 столбец
@@ -120,25 +151,7 @@ Vue.component('column3', {
 let app = new Vue({
     el: '#app',
     data: {
-        column1: [
-            {
-                name: 'Кот',
-                tasks: [
-                    {taskname: 'Допустим', visible: true, completed: false},
-                    {taskname: 'Я сказал', visible: true, completed: false},
-                    {taskname: 'Мяу', visible: true, completed: false}
-                ]
-            },
-            {
-                name: 'Птица',
-                completed: false,
-                tasks: [
-                    {taskname: 'Допустим', visible: true},
-                    {taskname: 'Я испугался и сказал', visible: true},
-                    {taskname: 'Пока', visible: true}
-                ]
-            }
-        ],
+        column1: [],
         column2: [],
         column3: [],
         formCard: {
@@ -148,13 +161,14 @@ let app = new Vue({
             task3: null,
             visible: null,
             completed: false
-        },
+        }
     },
     methods: {
         addCard() {
             if (this.column1.length < 3) {
                 this.column1.push(
                     {
+                        tapok: this.tapok,
                         name: this.formCard.name,
                         tasks: [
                             {

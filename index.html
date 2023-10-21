@@ -34,14 +34,12 @@
         </form>
     </div>
 
-    <column1 :column1="column1"></column1>
+    <column1 :column1="column1" :tasks="column1.tasks" v-on:column1_move="changeColumn1(index)"></column1>
 
     <column2 :column2="column2"></column2>
 
     <column3 :column3="column3"></column3>
 </div>
-
-
 </body>
 </html>
 
