@@ -202,11 +202,11 @@ let app = new Vue({
             localStorage.column2 = JSON.stringify(this.column2)
             localStorage.column3 = JSON.stringify(this.column3)
         },
-        time(id) {
-            let timeData = new Date();
-            this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
-            this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
-        },
+        // time(id) {
+        //     let timeData = new Date();
+        //     this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
+        //     this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
+        // }
     },
 
     mounted() {
