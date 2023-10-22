@@ -12,14 +12,19 @@ Vue.component('tapok', {
         data: {
             type: Object,
             default() {
-                return {}
+                return {
+                }
             }
         }
     },
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index) in data.tasks" :id="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_update(index)">Выполнить</button></p>
+        <p v-for="(data, index) in data.tasks" :tasks="tasks" :id="index">{{ data.taskname }} <button v-if="data.visible" v-on:click="data.visible = !data.visible" @click="task_update(index)">Выполнить</button></p>
+        <form v-show="this.data.tasks.length < 5 && this.data.completedNum !== 100" @submit.prevent="addTask">
+            <input placeholder="New Task" v-model="taskname" type="text">
+            <input class="submit-btn" type="submit" value="+">
+        </form>
     </div>
     `,
     data() {
@@ -27,12 +32,30 @@ Vue.component('tapok', {
             isHidden1: false,
             isHidden2: false,
             isHidden3: false,
+            taskname: null,
+            visible: null,
+            completed: false
+
         }
     },
     methods: {
         task_update(id) {
             this.data.tasks[id].completed = !this.data.tasks[id].completed
             eventBus.$emit('update-checkbox', this.id)
+        },
+        addTask() {
+            if (this.taskname && this.data.tasks.length < 5) {
+                let createTask = {
+                    taskname: this.taskname,
+                    visible: true,
+                    completed: false
+                }
+                this.data.tasks.push(createTask);
+                this.taskname = '';
+                this.visible = '';
+                this.completed = '';
+                this.$emit('save')
+            }
         }
     },
     mounted() {
@@ -71,6 +94,7 @@ Vue.component('column1', {
         <ul>
             <tapok :data="data" @save="save()" v-for="(data, index) in column1" :id="index"></tapok>
         </ul>
+
         </div>
     `,
     data() {
