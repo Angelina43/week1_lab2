@@ -25,6 +25,10 @@ Vue.component('tapok', {
             <input placeholder="New Task" v-model="taskname" type="text">
             <input class="submit-btn" type="submit" value="+">
         </form>
+         <div class="date" v-if="data.date">
+            <p>{{data.time}}</p>
+            <p>{{data.date}}</p>
+         </div>
     </div>
     `,
     data() {
