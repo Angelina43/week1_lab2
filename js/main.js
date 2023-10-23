@@ -107,11 +107,6 @@ Vue.component('column1', {
             taskname: null,
             tasks: [],
         }
-    },
-    methods: {
-        save() {
-            localStorage.column1 = JSON.stringify(this.column1)
-        }
     }
 })
 //2 столбец
@@ -130,12 +125,7 @@ Vue.component('column2', {
             <tapok :data="data" @save="save()" v-for="(data, index) in column2" :id="index"></tapok>
         </ul>
     </div>
-    `,
-    methods: {
-        save() {
-            localStorage.column2 = JSON.stringify(this.column2)
-        }
-    }
+    `
 })
 //3 столбец
 Vue.component('column3', {
@@ -153,12 +143,7 @@ Vue.component('column3', {
             <tapok :data="data" @save="save()" v-for="(data, index) in column3" :id="index"></tapok>
         </ul>
         </div>
-    `,
-    methods: {
-        save() {
-            localStorage.column3 = JSON.stringify(this.column3)
-        }
-    }
+    `
 })
 let app = new Vue({
     el: '#app',
