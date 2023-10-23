@@ -1,5 +1,4 @@
 let eventBus = new Vue()
-
 //карточка с задачами
 Vue.component('tapok', {
     props: {
@@ -39,7 +38,6 @@ Vue.component('tapok', {
             taskname: null,
             visible: null,
             completed: false
-
         }
     },
     methods: {
@@ -60,6 +58,11 @@ Vue.component('tapok', {
                 this.completed = '';
                 this.$emit('save')
             }
+        },
+        save() {
+            localStorage.column1 = JSON.stringify(this.column1)
+            localStorage.column2 = JSON.stringify(this.column2)
+            localStorage.column3 = JSON.stringify(this.column3)
         }
     },
     mounted() {
@@ -79,7 +82,6 @@ Vue.component('tapok', {
         })
     }
 })
-
 //1 столбец
 Vue.component('column1', {
     props: {
@@ -98,7 +100,6 @@ Vue.component('column1', {
         <ul>
             <tapok :data="data" @save="save()" v-for="(data, index) in column1" :id="index"></tapok>
         </ul>
-
         </div>
     `,
     data() {
@@ -106,9 +107,13 @@ Vue.component('column1', {
             taskname: null,
             tasks: [],
         }
+    },
+    methods: {
+        save() {
+            localStorage.column1 = JSON.stringify(this.column1)
+        }
     }
 })
-
 //2 столбец
 Vue.component('column2', {
     props: {
@@ -126,9 +131,12 @@ Vue.component('column2', {
         </ul>
     </div>
     `,
-    methods: {}
+    methods: {
+        save() {
+            localStorage.column2 = JSON.stringify(this.column2)
+        }
+    }
 })
-
 //3 столбец
 Vue.component('column3', {
     props: {
@@ -145,9 +153,13 @@ Vue.component('column3', {
             <tapok :data="data" @save="save()" v-for="(data, index) in column3" :id="index"></tapok>
         </ul>
         </div>
-    `
+    `,
+    methods: {
+        save() {
+            localStorage.column3 = JSON.stringify(this.column3)
+        }
+    }
 })
-
 let app = new Vue({
     el: '#app',
     data: {
@@ -202,11 +214,11 @@ let app = new Vue({
             localStorage.column2 = JSON.stringify(this.column2)
             localStorage.column3 = JSON.stringify(this.column3)
         },
-        // time(id) {
-        //     let timeData = new Date();
-        //     this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
-        //     this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
-        // }
+        time(id) {
+            let timeData = new Date();
+            this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
+            this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
+        }
     },
 
     mounted() {
@@ -217,7 +229,7 @@ let app = new Vue({
             this.column2 = JSON.parse(localStorage.column2)
         }
         if (localStorage.column3) {
-            this.thirdCol = JSON.parse(localStorage.column3)
+            this.column3 = JSON.parse(localStorage.column3)
         }
         eventBus.$on('move-column2', (id) => {
             if (this.column2.length < 5) {
@@ -238,4 +250,3 @@ let app = new Vue({
         })
     }
 })
-
