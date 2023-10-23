@@ -6,10 +6,10 @@ body>div{
 }
 
 .create{
-    background-color: #ffc09e;
+    background-color: #EDCEDC;
     display: flex;
     flex-direction: column;
-    width: 350px;
+    width: 300px;
     height: 310px;
 }
 .create-task{
@@ -17,19 +17,25 @@ body>div{
 }
 
 .new{
-    background-color: #fb7f71;
-    width: 450px;
+    background-color: #9899EB;
+    width: 350px;
     height: auto;
 }
 
 .active{
-    background-color: #a75151;
-    width: 450px;
+    background-color: #B398EB;
+    width: 350px;
+    height: auto;
+}
+
+.test{
+    background-color: #CE99EB;
+    width: 350px;
     height: auto;
 }
 
 .done{
-    background-color: #7e515a;
-    width: 450px;
+    background-color: #EAD3EB;
+    width: 350px;
     height: auto;
 }

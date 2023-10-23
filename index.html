@@ -15,30 +15,33 @@
     <div class="create">
         <form class="create-task" @submit.prevent="addCard">
             <p>
-                <label for="name">Название карточки:</label>
+                <label for="name">Название задачи: </label>
                 <input id="name" v-model="formCard.name" required>
             </p>
             <p>
-                <label for="task1">Task1:</label>
-                <input id="task1" v-model="formCard.task1" required>
+                <label for="about">Описание задачи: </label>
+                <input id="about" v-model="formCard.about" required>
             </p>
             <p>
-                <label for="task2">Task2:</label>
-                <input id="task2" v-model="formCard.task2" required>
+                <label for="date">Дата сдачи: </label>
+                <input type="date" id="date" v-model="formCard.date" required>
             </p>
             <p>
-                <label for="task3">Task3:</label>
-                <input id="task3" v-model="formCard.task3" required>
+                <label for="hour">Время задачи: </label>
+                <input type="time" id="hour" v-model="formCard.hour" required>
             </p>
-            <input type="submit" value="submit">
+            <input type="submit" value="Добавить">
         </form>
     </div>
 
-    <column1 :column1="column1" :tasks="column1.tasks" v-on:column1_move="changeColumn1(index)"></column1>
+    <column1 :column1="column1"></column1>
+<!--    :tasks="column1.tasks" v-on:column1_move="changeColumn1(index)"-->
 
     <column2 :column2="column2"></column2>
 
     <column3 :column3="column3"></column3>
+
+    <column4 :column4="column3"></column4>
 </div>
 </body>
 </html>
