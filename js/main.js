@@ -21,7 +21,7 @@ Vue.component('tapok', {
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(data, index, taskname) in data.tasks" :tasks="tasks" :id="index">{{ data.taskname }} <button v-if="data.visible"  v-on:click="data.visible = !data.visible" @click="task_update(index)">Выполнить</button></p>
+        <p v-for="(task, id) in data.tasks" :tasks="tasks" :id="id">{{ task.taskname }} <button v-if="task.visible"  v-on:click="task.visible = !task.visible" @click="task_update(id)">Выполнить</button></p>
         <div class="date" v-if="data.date">
             <p>{{data.time}}</p>
             <p>{{data.date}}</p>
@@ -29,16 +29,16 @@ Vue.component('tapok', {
     </div>
     `,
     data() {
-        return {
-            isHidden1: false,
-            isHidden2: false,
-            isHidden3: false,
-        }
+        return {}
     },
-    task_update(id) {
-        this.data.tasks[id].completed = !this.data.tasks[id].completed
-        eventBus.$emit('update-checkbox', this.id)
+    methods: {
+        task_update(id) {
+            console.log(id)
+            this.data.tasks[id].completed = !this.data.tasks[id].completed
+            eventBus.$emit('update-checkbox', this.id)
+        },
     },
+
     mounted() {
         eventBus.$on('update-checkbox', id => {
             let counterComp = 0;
@@ -51,21 +51,9 @@ Vue.component('tapok', {
                 }
             }
             this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
-            if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
+            if (this.data.completedNum >= 50) eventBus.$emit('move-column2', id, this.data);
             if (this.data.completedNum === 100) eventBus.$emit('move-column3', id, this.data);
         });
-        // for (let i in this.data) {
-        //     if (this.data[i]) {
-        //         for (let key in this.data.tasks) {
-        //             let k = []
-        //             let buff = this.data.tasks[key].taskname
-        //             if(buff !== null) k.push(buff)
-        //             console.log(k)
-        //                 // delete(this.data.tasks[key])
-        //         }
-        //     }
-        // }
-        // console.log(this.data)
     }
 
 })
@@ -138,53 +126,79 @@ let app = new Vue({
         column1: [],
         column2: [],
         column3: [],
+        tasks: [],
         formCard: {
             name: null,
-            task1: null,
-            task2: null,
-            task3: null,
-            task4: null,
-            task5: null,
-            visible: null,
-            completed: false
+            task1: {
+                taskname: null,
+                visible: true,
+                completed: false,
+            },
+            task2: {
+                taskname: null,
+                visible: true,
+                completed: false,
+            },
+            task3: {
+                taskname: null,
+                visible: true,
+                completed: false,
+            },
+            task4: {
+                taskname: null,
+                visible: true,
+                completed: false,
+            },
+            task5: {
+                taskname: null,
+                visible: true,
+                completed: false,
+            },
+            // visible: null,
+            // completed: false,
         }
     },
     methods: {
-        addTask() {
-            if(this.formCard.task1 !== null) this.column1.tasks.push(this.formCard.task1)
-        },
         addCard() {
             if (this.column1.length < 3) {
+                if (this.formCard.task1.taskname) this.tasks.push(this.formCard.task1)
+                if (this.formCard.task2.taskname) this.tasks.push(this.formCard.task2)
+                if (this.formCard.task3.taskname) this.tasks.push(this.formCard.task3)
+                if (this.formCard.task4.taskname) this.tasks.push(this.formCard.task4)
+                if (this.formCard.task5.taskname) this.tasks.push(this.formCard.task5)
+
                 this.column1.push(
                     {
                         name: this.formCard.name,
-                        tasks: [
-                            {
-                                taskname: this.formCard.task1,
-                                visible: true,
-                                completed: false
-                            },
-                            {
-                                taskname: this.formCard.task2,
-                                visible: true,
-                                completed: false
-                            },
-                            {
-                                taskname: this.formCard.task3,
-                                visible: true,
-                                completed: false
-                            },
-                            {
-                                taskname: this.formCard.task4,
-                                visible: true,
-                                completed: false
-                            },
-                            {
-                                taskname: this.formCard.task5,
-                                visible: true,
-                                completed: false
-                            },
-                        ]
+                        tasks: this.tasks
+
+                        // tasks: [
+                        //     {
+                        //         taskname: this.formCard.task1,
+                        //         visible: true,
+                        //         completed: false
+                        //     },
+                        //     {
+                        //         taskname: this.formCard.task2,
+                        //         visible: true,
+                        //         completed: false
+                        //     },
+                        //     {
+                        //         taskname: this.formCard.task3,
+                        //         visible: true,
+                        //         completed: false
+                        //     },
+                        //     {
+                        //         taskname: this.formCard.task4,
+                        //         visible: true,
+                        //         completed: false
+                        //     },
+                        //     {
+                        //         taskname: this.formCard.task5,
+                        //         visible: true,
+                        //         completed: false
+                        //     },
+                        // ]
                     }
                 )
                 this.formCard.name = '';
@@ -193,8 +207,9 @@ let app = new Vue({
                 this.formCard.task3 = '';
                 this.formCard.task4 = '';
                 this.formCard.task5 = '';
-                this.formCard.visible = '';
-                this.formCard.completed = '';
+                this.tasks = '';
+                // this.formCard.visible = '';
+                // this.formCard.completed = '';
                 this.save()
             }
         },
