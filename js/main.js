@@ -2,14 +2,8 @@ let eventBus = new Vue()
 //карточка с задачами
 Vue.component('tapok', {
     props: {
-        tapok: {
-            type: Object,
-        },
         id: {
             type: Number,
-        },
-        column1: {
-            type: Array,
         },
         data: {
             type: Object,
@@ -154,8 +148,6 @@ let app = new Vue({
                 visible: true,
                 completed: false,
             },
-            // visible: null,
-            // completed: false,
         }
     },
     methods: {
@@ -170,35 +162,7 @@ let app = new Vue({
                 this.column1.push(
                     {
                         name: this.formCard.name,
-                        tasks: this.tasks
-
-                        // tasks: [
-                        //     {
-                        //         taskname: this.formCard.task1,
-                        //         visible: true,
-                        //         completed: false
-                        //     },
-                        //     {
-                        //         taskname: this.formCard.task2,
-                        //         visible: true,
-                        //         completed: false
-                        //     },
-                        //     {
-                        //         taskname: this.formCard.task3,
-                        //         visible: true,
-                        //         completed: false
-                        //     },
-                        //     {
-                        //         taskname: this.formCard.task4,
-                        //         visible: true,
-                        //         completed: false
-                        //     },
-                        //     {
-                        //         taskname: this.formCard.task5,
-                        //         visible: true,
-                        //         completed: false
-                        //     },
-                        // ]
+                        tasks: this.tasks,
                     }
                 )
                 this.formCard.name = '';
@@ -208,8 +172,6 @@ let app = new Vue({
                 this.formCard.task4 = '';
                 this.formCard.task5 = '';
                 this.tasks = '';
-                // this.formCard.visible = '';
-                // this.formCard.completed = '';
                 this.save()
             }
         },
