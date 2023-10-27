@@ -16,7 +16,7 @@ Vue.component('tapok', {
             default() {
                 return {}
             }
-        }
+        },
     },
     template: `
     <div>
