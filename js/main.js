@@ -8,31 +8,36 @@ Vue.component('tapok', {
         data: {
             type: Object,
             default() {
-                return {}
+                return {
+                }
             }
-        },
+        }
     },
     template: `
     <div>
         <li><p>{{ data.name }}</p></li>
-        <p v-for="(task, id) in data.tasks" :tasks="tasks" :id="id">{{ task.taskname }} <button v-if="task.visible"  v-on:click="task.visible = !task.visible" @click="task_update(id)">Выполнить</button></p>
-        <div class="date" v-if="data.date">
+         <p v-for="(task, id) in data.tasks" :tasks="tasks" :id="id">{{ task.taskname }} <button v-if="task.visible"  v-on:click="task.visible = !task.visible" @click="task_update(id)">Выполнить</button></p>
+         <div class="date" v-if="data.date">
             <p>{{data.time}}</p>
             <p>{{data.date}}</p>
          </div>
     </div>
     `,
     data() {
-        return {}
+        return {
+        }
     },
     methods: {
         task_update(id) {
-            console.log(id)
             this.data.tasks[id].completed = !this.data.tasks[id].completed
             eventBus.$emit('update-checkbox', this.id)
         },
+        save() {
+            localStorage.column1 = JSON.stringify(this.column1)
+            localStorage.column2 = JSON.stringify(this.column2)
+            localStorage.column3 = JSON.stringify(this.column3)
+        }
     },
-
     mounted() {
         eventBus.$on('update-checkbox', id => {
             let counterComp = 0;
@@ -45,11 +50,10 @@ Vue.component('tapok', {
                 }
             }
             this.data.completedNum = (counterComp / (counterComp + counterNotComp)) * 100;
-            if (this.data.completedNum >= 50) eventBus.$emit('move-column2', id, this.data);
+            if (this.data.completedNum > 50) eventBus.$emit('move-column2', id, this.data);
             if (this.data.completedNum === 100) eventBus.$emit('move-column3', id, this.data);
-        });
+        })
     }
-
 })
 //1 столбец
 Vue.component('column1', {
@@ -126,54 +130,63 @@ let app = new Vue({
             task1: {
                 taskname: null,
                 visible: true,
-                completed: false,
+                completed: false
             },
-            task2: {
+            task2:  {
                 taskname: null,
                 visible: true,
-                completed: false,
+                completed: false
             },
             task3: {
                 taskname: null,
                 visible: true,
-                completed: false,
+                completed: false
             },
             task4: {
                 taskname: null,
                 visible: true,
-                completed: false,
+                completed: false
             },
             task5: {
                 taskname: null,
                 visible: true,
-                completed: false,
+                completed: false
             },
+            // visible: null,
+            // completed: false
         }
     },
     methods: {
         addCard() {
-            if (this.column1.length < 3) {
-                if (this.formCard.task1.taskname) this.tasks.push(this.formCard.task1)
-                if (this.formCard.task2.taskname) this.tasks.push(this.formCard.task2)
-                if (this.formCard.task3.taskname) this.tasks.push(this.formCard.task3)
-                if (this.formCard.task4.taskname) this.tasks.push(this.formCard.task4)
-                if (this.formCard.task5.taskname) this.tasks.push(this.formCard.task5)
+            if (this.formCard.task1.taskname) this.tasks.push(this.formCard.task1)
+            if (this.formCard.task2.taskname) this.tasks.push(this.formCard.task2)
+            if (this.formCard.task3.taskname) this.tasks.push(this.formCard.task3)
+            if (this.formCard.task4.taskname) this.tasks.push(this.formCard.task4)
+            if (this.formCard.task5.taskname) this.tasks.push(this.formCard.task5)
 
-                this.column1.push(
-                    {
-                        name: this.formCard.name,
-                        tasks: this.tasks,
-                    }
-                )
-                this.formCard.name = '';
-                this.formCard.task1 = '';
-                this.formCard.task2 = '';
-                this.formCard.task3 = '';
-                this.formCard.task4 = '';
-                this.formCard.task5 = '';
-                this.tasks = '';
-                this.save()
-            }
+            this.column1.push(
+                {
+                    name: this.formCard.name,
+                    tasks: this.tasks
+                }
+            )
+            this.formCard.name = '';
+            this.formCard.task1 = { visible: true, completed: false };
+            this.formCard.task1.taskname = '';
+            this.formCard.task2 = { visible: true, completed: false };
+            this.formCard.task2.taskname = '';
+            this.formCard.task3 = { visible: true, completed: false };
+            this.formCard.task3.taskname = '';
+            this.formCard.task4 = { visible: true, completed: false };
+            this.formCard.task4.taskname = '';
+            this.formCard.task5 = { visible: true, completed: false };
+            this.formCard.task5.taskname = '';
+            this.formCard.visible = '';
+            this.formCard.completed = '';
+            this.tasks = [];
+            this.save()
+
+            console.log(this.tasks)
         },
         save() {
             localStorage.column1 = JSON.stringify(this.column1)
@@ -184,7 +197,7 @@ let app = new Vue({
             let timeData = new Date();
             this.column2[id].time = timeData.getHours() + ':' + timeData.getMinutes();
             this.column2[id].date = timeData.getDate() + '.' + timeData.getMonth() + '.' + timeData.getFullYear();
-        },
+        }
     },
 
     mounted() {
@@ -198,12 +211,10 @@ let app = new Vue({
         //     this.column3 = JSON.parse(localStorage.column3)
         // }
         eventBus.$on('move-column2', (id) => {
-            if (this.column2.length < 5) {
-                if (this.column1[id].completedNum >= 50) {
-                    this.column2.push(this.column1[id])
-                    this.column1.splice(id, 1)
-                    this.save()
-                }
+            if (this.column1[id].completedNum >= 50) {
+                this.column2.push(this.column1[id])
+                this.column1.splice(id, 1)
+                this.save()
             }
         });
         eventBus.$on('move-column3', (id) => {
