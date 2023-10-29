@@ -8,8 +8,7 @@ Vue.component('tapok', {
         data: {
             type: Object,
             default() {
-                return {
-                }
+                return {}
             }
         }
     },
@@ -24,8 +23,7 @@ Vue.component('tapok', {
     </div>
     `,
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         task_update(id) {
@@ -132,7 +130,7 @@ let app = new Vue({
                 visible: true,
                 completed: false
             },
-            task2:  {
+            task2: {
                 taskname: null,
                 visible: true,
                 completed: false
@@ -152,9 +150,7 @@ let app = new Vue({
                 visible: true,
                 completed: false
             },
-            // visible: null,
-            // completed: false
-        }
+        },
     },
     methods: {
         addCard() {
@@ -164,29 +160,33 @@ let app = new Vue({
             if (this.formCard.task4.taskname) this.tasks.push(this.formCard.task4)
             if (this.formCard.task5.taskname) this.tasks.push(this.formCard.task5)
 
-            this.column1.push(
-                {
-                    name: this.formCard.name,
-                    tasks: this.tasks
+            if (this.column1.length < 3) {
+                if (this.tasks.length !== 0 && this.formCard.name) {
+                    if (this.tasks.length === 3) {
+                        this.column1.push(
+                            {
+                                name: this.formCard.name,
+                                tasks: this.tasks
+                            }
+                        )
+                    }
                 }
-            )
+            }
             this.formCard.name = '';
-            this.formCard.task1 = { visible: true, completed: false };
+            this.formCard.task1 = {visible: true, completed: false};
             this.formCard.task1.taskname = '';
-            this.formCard.task2 = { visible: true, completed: false };
+            this.formCard.task2 = {visible: true, completed: false};
             this.formCard.task2.taskname = '';
-            this.formCard.task3 = { visible: true, completed: false };
+            this.formCard.task3 = {visible: true, completed: false};
             this.formCard.task3.taskname = '';
-            this.formCard.task4 = { visible: true, completed: false };
+            this.formCard.task4 = {visible: true, completed: false};
             this.formCard.task4.taskname = '';
-            this.formCard.task5 = { visible: true, completed: false };
+            this.formCard.task5 = {visible: true, completed: false};
             this.formCard.task5.taskname = '';
             this.formCard.visible = '';
             this.formCard.completed = '';
             this.tasks = [];
             this.save()
-
-            console.log(this.tasks)
         },
         save() {
             localStorage.column1 = JSON.stringify(this.column1)
@@ -201,20 +201,22 @@ let app = new Vue({
     },
 
     mounted() {
-        // if (localStorage.column1) {
-        //     this.column1 = JSON.parse(localStorage.column1)
-        // }
-        // if (localStorage.column2) {
-        //     this.column2 = JSON.parse(localStorage.column2)
-        // }
-        // if (localStorage.column3) {
-        //     this.column3 = JSON.parse(localStorage.column3)
-        // }
+        if (localStorage.column1) {
+            this.column1 = JSON.parse(localStorage.column1)
+        }
+        if (localStorage.column2) {
+            this.column2 = JSON.parse(localStorage.column2)
+        }
+        if (localStorage.column3) {
+            this.column3 = JSON.parse(localStorage.column3)
+        }
         eventBus.$on('move-column2', (id) => {
-            if (this.column1[id].completedNum >= 50) {
-                this.column2.push(this.column1[id])
-                this.column1.splice(id, 1)
-                this.save()
+            if (this.column2.length < 5) {
+                if (this.column1[id].completedNum >= 50) {
+                    this.column2.push(this.column1[id])
+                    this.column1.splice(id, 1)
+                    this.save()
+                }
             }
         });
         eventBus.$on('move-column3', (id) => {
