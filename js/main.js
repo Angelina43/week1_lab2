@@ -161,16 +161,15 @@ let app = new Vue({
             if (this.formCard.task5.taskname) this.tasks.push(this.formCard.task5)
 
             if (this.column1.length < 3) {
-                if (this.tasks.length !== 0 && this.formCard.name) {
-                    if (this.tasks.length === 3) {
+                if (this.tasks.length >= 3 && this.formCard.name) {
                         this.column1.push(
                             {
                                 name: this.formCard.name,
                                 tasks: this.tasks
                             }
                         )
-                    }
                 }
+                else alert('Заполните поля (как минимум 3) и имя')
             }
             this.formCard.name = '';
             this.formCard.task1 = {visible: true, completed: false};
